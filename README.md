@@ -60,3 +60,15 @@ Users can browse food items, add to cart, place orders, and track their orders.
 
 git clone https://github.com/divya-123345/Online-Food-Ordering-System.git
 
+
+
+2.Install dependencies
+
+pip install -r requirements.txt
+
+
+
+3.Run the application
+
+python app.py
+
