@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Pending Payments — TastyHub</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet"
+ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{
+  --accent:#ff4d79;
+  --dark:#111;
+  --bg:#f7f7fc;
+  --card:#fff;
+}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins;}
+body{background:var(--bg);}
+
+/* HEADER */
+.header{
+  display:flex;
+  align-items:center;
+  gap:15px;
+  padding:15px 25px;
+  background:#fff;
+  border-bottom:3px solid rgba(255,77,77,.15);
+}
+.header img{
+  width:55px;
+  border-radius:12px;
+  margin-left:200px;
+}
+.header-title{
+  font-size:50px;
+  font-weight:900;
+  color:var(--accent);
+}
+/* NAVBAR */
+.navbar{
+  background:#111;padding:12px 20px;
+}
+.navbar a{color:#fff;font-size:22px;text-decoration:none;}
+
+/* CONTAINER */
+.container{
+  max-width:900px;
+  margin:40px auto;
+  background:#fff;
+  padding:25px;
+  border-radius:15px;
+  box-shadow:0 6px 18px rgba(0,0,0,.12);
+}
+
+h2{
+  color:var(--accent);
+  margin-bottom:20px;
+  text-align:center;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+/* CARD */
+.payment-card{
+  border:1px solid #ddd;
+  border-radius:12px;
+  padding:18px;
+  margin-bottom:15px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  transition:.3s;
+}
+.payment-card:hover{
+  background:#f9f9f9;
+}
+
+.payment-info p{
+  margin-bottom:6px;
+  font-weight:600;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+.pay-btn{
+  padding:12px 25px;
+  background:#2ecc71;
+  color:white;
+  border:none;
+  border-radius:25px;
+  font-size:18px;
+  font-weight:700;
+  cursor:pointer;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+.pay-btn:hover{background:#27ae60;}
+
+.empty{
+  text-align:center;
+  font-size:20px;
+  color:#777;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <img src="/static/Images/Logo.webp">
+  <div class="header-title">TASTYHUB FOOD RESTAURANT</div>
+</header>
+<!-- NAV -->
+<nav class="navbar">
+  <a href="/customer_home"><i class="fa fa-arrow-left"></i></a>
+</nav>
+
+<!-- CONTENT -->
+<div class="container">
+
+  <h2>⏳ Pending Payments</h2>
+
+  <div id="pendingList">
+    <p class="empty">Loading...</p>
+  </div>
+
+</div>
+<script>
+fetch("/customer/pending_payments")
+.then(res => res.json())
+.then(data => {
+  const box = document.getElementById("pendingList");
+  box.innerHTML = "";
+
+  if(data.length === 0){
+    box.innerHTML = `<p class="empty">🎉 No pending payments</p>`;
+    return;
+  }
+
+  data.forEach(o => {
+    box.innerHTML += `
+      <div class="payment-card">
+        <div class="payment-info">
+          <p>🧾 Order ID: <b>#${o.id}</b></p>
+          <p>💰 Amount: ₹${o.total_amount}</p>
+          <p>📌 Status: <span style="color:red;font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">Payment Pending</span></p>
+        </div>
+        <button class="pay-btn" onclick="payNow(${o.id})">
+          Pay Now
+        </button>
+      </div>
+    `;
+  });
+})
+.catch(err => {
+  document.getElementById("pendingList").innerHTML =
+    `<p class="empty">Error loading data</p>`;
+  console.error(err);
+});
+
+function payNow(orderId){
+  window.location.href = "/payment/" + orderId;
+}
+</script>
+
+      
+</body>
+</html>

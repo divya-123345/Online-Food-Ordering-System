@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>TastyHub – Cart</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--accent:#ff4d79;--bg:#f7f7fc;--primary:#111}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins}
+body{background:var(--bg)}
+
+.header{background:#fff;padding:15px;display:flex;align-items:center;border-bottom:3px solid rgba(255,77,77,.15)}
+.header img{width:55px;border-radius:12px;margin-left:200px;margin-right: 20px;}
+.header-title{font-size:60px;font-weight:900;color:var(--accent);font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;letter-spacing: 1.5px;word-spacing: 5px;}
+.navbar{background:var(--primary);padding:10px 20px;display:flex;align-items:center}
+.navbar a{color:#fff;margin-right:20px;text-decoration:none;font-weight:600}
+.navbar a:hover{color:var(--accent)}
+
+#cartContainer{width:95%;max-width:900px;margin:30px auto}
+.cart-item{display:flex;align-items:center;background:#fff;padding:15px;margin-bottom:15px;border-radius:12px;box-shadow:0 5px 15px rgba(0,0,0,.1)}
+.cart-item img{width:150px;height:120px;object-fit:cover;border-radius:12px;margin-right:15px;flex-shrink:0}
+.cart-item-details{flex:1;display:flex;flex-direction:column;justify-content:space-between}
+.cart-item-details h4{margin-bottom:5px;font-size:25px;font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;color:#333}
+.cart-item-details p{margin-bottom:8px;font-weight:600;color:#555}
+.quantity-control{display:flex;align-items:center;margin-top:5px}
+.quantity-control button{padding:5px 10px;background:var(--accent);color:#fff;border:none;border-radius:5px;cursor:pointer;font-weight:600;margin:0 5px;transition:0.3s}
+.quantity-control button:hover{background:#e6005c}
+.remove-btn{padding:5px 10px;background:#e74c3c;color:#fff;border:none;border-radius:5px;font-size: 15px;cursor:pointer;font-weight:600;margin-left:10px;transition:0.3s;font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;}
+.remove-btn:hover{background:#c0392b}
+
+.cart-footer{width:95%;max-width:900px;margin:20px auto;display:flex;justify-content:space-between;align-items:center;background:#fff;padding:15px;border-radius:12px;box-shadow:0 5px 15px rgba(0,0,0,.1)}
+.total-bill{font-size:30px;font-weight:700;color:#333;word-spacing: 5px;}
+.proceed-btn{padding:12px 25px;background:#2ecc71;color:#fff;font-size:25px;font-weight:700;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  border:none;border-radius:25px;cursor:pointer;transition:0.3s}
+.proceed-btn:hover{background:#27ae60}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <img src="/static/Images/Logo.webp" alt="Logo">
+  <div class="header-title">TASTYHUB FOOD RESTAURANT</div>
+</header>
+
+<nav class="navbar">
+  <a href="/customer_home"><i class="fa fa-arrow-left"></i> </a>
+</nav>
+
+<section id="cartContainer">
+  <!-- Cart items will be loaded here -->
+</section>
+
+<div class="cart-footer">
+  <div class="total-bill" id="totalBill">Total : ₹0</div>
+  <button class="proceed-btn" onclick="placeOrder()">Order Now</button>
+</div>
+
+<script>
+let cartItems = [];
+
+// Fetch cart from backend
+async function loadCart(){
+  const res = await fetch('/get_cart');
+  cartItems = await res.json();
+  renderCart();
+}
+
+// Render cart items
+function renderCart(){
+  const container = document.getElementById('cartContainer');
+  container.innerHTML = "";
+  let total = 0;
+
+  cartItems.forEach(item => {
+    total += item.price * item.quantity;
+
+    container.innerHTML += `
+    <div class="cart-item" data-cartid="${item.cart_id}">
+      <img src="${item.image}" alt="${item.name}">
+      <div class="cart-item-details">
+        <div>
+          <h4>${item.name} - ₹${item.price}</h4>
+        </div>
+        <div class="quantity-control">
+          <button onclick="changeQuantity(${item.cart_id}, -1)">-</button>
+          <span id="qty-${item.cart_id}">${item.quantity}</span>
+          <button onclick="changeQuantity(${item.cart_id}, 1)">+</button>
+          <button class="remove-btn" onclick="removeItem(${item.cart_id})">Remove</button>
+        </div>
+      </div>
+    </div>`;
+  });
+
+  document.getElementById('totalBill').innerText = `Total: ₹${total.toFixed(2)}`;
+}
+
+// Change quantity
+async function changeQuantity(cart_id, delta){
+  const item = cartItems.find(i => i.cart_id === cart_id);
+  if(!item) return;
+
+  const newQty = item.quantity + delta;
+  if(newQty < 1){
+    return removeItem(cart_id);
+  }
+
+  const res = await fetch('/update_cart', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({cart_id: cart_id, quantity: newQty})
+  });
+  const data = await res.json();
+  if(data.status === "success"){
+    item.quantity = newQty;
+    document.getElementById(`qty-${cart_id}`).innerText = newQty;
+    renderCart();
+  }
+}
+
+// Remove item
+async function removeItem(cart_id){
+  const res = await fetch('/update_cart', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({cart_id: cart_id, quantity:0})
+  });
+  const data = await res.json();
+  if(data.status === "success"){
+    cartItems = cartItems.filter(i => i.cart_id !== cart_id);
+    renderCart();
+  }
+}
+
+// Place order
+async function placeOrder(){
+  if(cartItems.length === 0){
+    alert("Cart is empty!");
+    return;
+  }
+  const res = await fetch('/place_order', {method:'POST'});
+  const data = await res.json();
+  if(data.status === "success"){
+    // Redirect to next page (order bill)
+    window.location.href = `/order_bill/${data.order_id}`;
+  } else {
+    alert(data.message);
+  }
+}
+
+loadCart();
+</script>
+</body>
+</html>

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TastyHub — Login</title>
+
+<style>
+:root{
+    --accent:#ff4d79;
+    --bg:#f7f7fc;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Poppins;
+}
+
+body{
+    background:var(--bg);
+}
+
+/* HEADER */
+.header{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    padding:14px 22px;
+    background:#fff;
+    border-bottom:3px solid rgba(255,77,77,0.13);
+}
+.header img{
+    width:55px;
+    height:55px;
+    border-radius:10px;
+    margin-left:220px;
+}
+.header-title{
+    font-size:50px;
+    font-weight:900;
+    color:var(--accent);
+    margin-left:18px;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+/* NAVBAR */
+.navbar{
+    height:60px;
+    background:#111;
+    position:relative;
+}
+.navbar a{
+    position:absolute;
+    left:20px;
+    top:50%;
+    transform:translateY(-50%);
+    font-size:26px;
+    color:white;
+    text-decoration:none;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+/* CONTAINER */
+.container{
+    width:420px;
+    margin:50px auto;
+    background:white;
+    padding:30px;
+    border-radius:16px;
+    box-shadow:0 8px 18px rgba(0,0,0,0.12);
+}
+
+h2{
+    text-align:center;
+    color:var(--accent);
+    margin-bottom:22px;
+    font-size:32px;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+/* INPUTS */
+label{
+    font-weight:bold;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+input{
+    width:100%;
+    padding:14px;
+    margin:10px 0 18px;
+    border-radius:10px;
+    border:2px solid #ddd;
+    font-size:16px;
+    font-weight:bold;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+input::placeholder{
+    font-weight:bold;
+}
+
+/* BUTTONS */
+button{
+    width:100%;
+    padding:14px;
+    background:var(--accent);
+    border:none;
+    border-radius:10px;
+    color:white;
+    font-size:20px;
+    font-weight:bold;
+    cursor:pointer;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+button:hover{
+    opacity:0.9;
+}
+
+.btn-group{
+    display:flex;
+    justify-content:space-between;
+    margin-top:10px;
+}
+
+.home-btn{
+    background:#555;
+}
+
+/* LINKS */
+.link-box{
+    text-align:center;
+    margin-top:15px;
+    font-size:17px;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+.link-box a{
+    color:var(--accent);
+    font-weight:bold;
+    text-decoration:none;
+}
+.link-box a:hover{
+    text-decoration:underline;
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header class="header">
+    <img src="/static/Images/Logo.webp" alt="logo">
+    <div class="header-title">TASTYHUB FOOD RESTAURANT</div>
+</header>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <a href="/">&#9776;</a>
+</nav>
+
+<!-- LOGIN FORM -->
+<div class="container">
+
+    <h2>Login</h2>
+
+    <form id="loginForm" action="/login" method="POST" autocomplete="off">
+
+        <label>Email</label>
+        <input type="text" name="email" id="email" placeholder="Enter Email">
+
+        <label>Password</label>
+        <input type="password" name="password" id="password" placeholder="Enter Password">
+
+        <div class="btn-group">
+            <button type="submit" onclick="return validateLogin()">Login</button>
+        </div>
+
+        <div class="link-box">
+            <a href="/forgot_password" style=" font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">Forgot Password?</a>
+        </div>
+
+        <div class="link-box">
+            Don’t have an account? <a href="/register" style=" font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">Create Account</a>
+        </div>
+
+    </form>
+</div>
+
+<script>
+function validateLogin() {
+    let email = document.getElementById("email").value;
+    let pass = document.getElementById("password").value;
+
+    if (email === "" || pass === "") {
+        alert("All fields are required!");
+        return false;
+    }
+    return true;
+}
+</script>
+
+</body>
+</html>

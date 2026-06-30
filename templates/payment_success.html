@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Payment Successful – TastyHub</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet"
+ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+:root{
+  --accent:#2ecc71;
+  --bg:#f7f7fc;
+  --primary:#111;
+}
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Poppins;
+}
+body{
+  background:var(--bg);
+}
+
+/* HEADER */
+.header{
+  background:#fff;
+  padding:15px;
+  display:flex;
+  align-items:center;
+  border-bottom:3px solid rgba(0,200,100,.2);
+}
+.header img{
+  width:55px;
+  border-radius:12px;
+  margin-left:240px;
+  margin-right:10px;
+}
+.header-title{
+  font-size:50px;
+  font-weight:900;
+  color:#ff4d79;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+/* NAVBAR */
+.navbar{
+  background:var(--primary);
+  padding:12px 20px;
+}
+.navbar a{
+  color:#fff;
+  text-decoration:none;
+  font-size:18px;
+}
+.navbar a:hover{
+  color:#ff4d79;
+}
+
+/* PAYMENT BOX */
+.success-container{
+  max-width:600px;
+  margin:40px auto;
+  background:#fff;
+  border-radius:15px;
+  padding:30px;
+  box-shadow:0 5px 20px rgba(0,0,0,.1);
+  text-align:center;
+}
+
+/* CHECK ICON */
+.success-icon{
+  width:90px;
+  height:90px;
+  border-radius:50%;
+  background:var(--accent);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin:0 auto 20px;
+}
+.success-icon i{
+  color:#fff;
+  font-size:45px;
+}
+
+.success-container h2{
+  color:var(--accent);
+  font-size:34px;
+  margin-bottom:10px;
+}
+
+.success-container p{
+  font-size:16px;
+  color:#555;
+}
+
+/* PAYMENT DETAILS */
+.details{
+  margin-top:25px;
+  text-align:left;
+  background:#f7f7fc;
+  padding:18px;
+  border-radius:12px;
+}
+.details div{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:10px;
+  font-size:16px;
+}
+.details strong,span{
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  font-weight: bold;
+  color:#333;
+}
+
+/* BUTTONS */
+.actions{
+  margin-top:25px;
+  display:flex;
+  justify-content:space-between;
+  gap:15px;
+}
+.actions a{
+  flex:1;
+  text-decoration:none;
+  padding:12px;
+  text-align:center;
+  border-radius:25px;
+  font-size:18px;
+  font-weight:600;
+}
+.home-btn{
+  background:#3498db;
+  color:#fff;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  font-size: 20px;
+  
+}
+.track-btn{
+  background:#ff4d79;
+  color:#fff;
+   font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  font-size: 20px;
+}
+.actions a:hover{
+  opacity:.9;
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <img src="/static/Images/Logo.webp">
+  <div class="header-title">TASTYHUB FOOD RESTAURANT</div>
+</header>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a href="/customer_home"><i class="fa fa-home"></i></a>
+</nav>
+
+<!-- SUCCESS CONTENT -->
+<div class="success-container">
+
+  <div class="success-icon">
+    <i class="fa fa-check"></i>
+  </div>
+
+  <h2 style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">Payment Successful</h2>
+  <p style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-weight: bold;">Your order has been placed successfully 🎉</p>
+
+  <div class="details">
+    <div>
+      <span>Order ID</span>
+      <strong>#{{ order_id }}</strong>
+    </div>
+    <div>
+      <span>Payment Mode</span>
+      <strong>UPI / Card</strong>
+    </div>
+    <div>
+      <span>Status</span>
+      <strong style="color:#2ecc71">Paid</strong>
+    </div>
+  </div>
+
+  <div class="actions">
+    <a href="/customer_home" class="home-btn">Order More </a>
+    <a href="/track_order" class="track-btn">Track Order</a>
+  </div>
+
+</div>
+
+</body>
+</html>

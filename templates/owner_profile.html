@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>TastyHub – Profile</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+:root{--accent:#ff4d79;--bg:#f7f7fc;--primary:#111}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins}
+body{background:var(--bg)}
+
+.header{
+  background:#fff;padding:15px;display:flex;align-items:center;
+  border-bottom:3px solid rgba(255,77,77,.15)
+}
+.header img{width:55px;border-radius:12px;margin-left:200px;margin-right:10px}
+.header-title{font-size:50px;font-weight:900;color:var(--accent)}
+
+.navbar{background:var(--primary);padding:10px 20px}
+.navbar a{color:#fff;text-decoration:none;font-weight:600}
+
+.profile-container{
+  max-width:900px;margin:40px auto;background:#fff;
+  padding:30px;border-radius:15px;
+  box-shadow:0 5px 25px rgba(0,0,0,.1);
+  display:flex;gap:30px;flex-wrap:wrap
+}
+
+.profile-pic{text-align:center;flex:1}
+.profile-pic img{
+  width:180px;height:180px;border-radius:50%;
+  border:5px solid var(--accent);object-fit:cover
+}
+
+.profile-details{flex:2}
+.profile-details h2{color:var(--accent);margin-bottom:15px;font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size: 40px;}
+
+.form-group{
+  display:flex;justify-content:space-between;
+  background:#f7f7fc;padding:12px 18px;
+  border-radius:10px;margin-bottom:12px
+}
+.form-group label{font-weight:600;color:#555;font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;}
+.form-group input{
+  width:60%;padding:6px;border-radius:6px;
+  border:1px solid #ccc;background:#eee;
+  font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+input:read-only{cursor:not-allowed}
+
+.btn{
+  padding:10px 22px;border:none;border-radius:8px;
+  font-size:16px;font-weight:600;cursor:pointer
+}
+.edit-btn{background:var(--accent);color:#fff;font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;}
+.save-btn{background:#2ecc71;color:#fff;display:none;font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+  <img src="/static/Images/Logo.webp">
+  <div class="header-title">TASTYHUB FOOD RESTAURANT</div>
+</header>
+
+<nav class="navbar">
+  <a href="/owner_dashboard"><i class="fa fa-arrow-left"></i></a>
+</nav>
+
+<div class="profile-container">
+
+  <div class="profile-pic">
+    <img src="/static/Images/Logo.webp">
+  </div>
+
+  <div class="profile-details">
+    <h2>Owner Profile</h2>
+
+    <form method="POST" action="/update_owner_profile" id="profileForm">
+
+      <div class="form-group">
+        <label>👤 Full Name</label>
+        <input type="text" name="fullname" value="{{ owner.fullname }}" readonly>
+      </div>
+
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" name="email" value="{{ owner.email }}" readonly>
+      </div>
+
+      <div class="form-group">
+        <label>Mobile</label>
+        <input type="text" name="mobile" value="{{ owner.mobile }}" readonly>
+      </div>
+
+      <div class="form-group">
+        <label>📍Address</label>
+        <input type="text" name="address" value="{{ owner.address }}" readonly>
+      </div>
+
+      <!-- PASSWORD (Hidden initially) -->
+      <div class="form-group" id="passwordBox" style="display:none;">
+        <label>New Password</label>
+        <input type="password" name="password" placeholder="Enter new password">
+      </div>
+
+      <button type="button" class="btn edit-btn" onclick="enableEdit()">Edit Profile</button>
+      <button type="submit" class="btn save-btn" id="saveBtn">Save Changes</button>
+
+    </form>
+  </div>
+
+</div>
+
+<script>
+function enableEdit(){
+  const inputs = document.querySelectorAll("input");
+  inputs.forEach(i => {
+    i.removeAttribute("readonly");
+    i.style.background = "#fff";
+  });
+
+  document.getElementById("passwordBox").style.display = "flex";
+  document.getElementById("saveBtn").style.display = "inline-block";
+}
+</script>
+
+</body>
+</html>

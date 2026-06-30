@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TastyHub | Veg & Non-Veg Restaurant</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+    --primary:#ff4d4d;
+    --dark:#222;
+    --light:#f7f7f7;
+    --white:#fff;
+}
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif
+}
+body{ background:var(--light); }
+
+/* HEADER */
+header{
+    position:sticky;
+    top:0;
+    z-index:1000;
+    background:#fff;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:12px 50px;
+    box-shadow:0 4px 15px rgba(0,0,0,0.1);
+}
+.logo{ display:flex; align-items:center; gap:15px; }
+.logo img{ width:60px; height:60px; border-radius:10px; }
+.logo h1{ color:var(--primary); font-size:32px; }
+nav a{ margin:0 15px; text-decoration:none; color:#080808; font-weight:500; }
+nav a:hover{ color:var(--primary); }
+
+.auth-btns button{ padding:10px 22px; border-radius:25px; border:2px solid var(--primary); background:transparent; margin-left:10px; }
+.auth-btns a{ text-decoration:none; color:var(--primary); font-weight:600; }
+.auth-btns .primary{ background:var(--primary); }
+.auth-btns .primary a{ color:#fff; }
+
+/* HERO */
+.hero{
+    height:90vh;
+    background: url('/static/images/background.jpeg') center/cover no-repeat;
+    position: relative;
+}
+
+
+.hero::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:rgba(0,0,0,0.2); /* lighter */
+}
+
+.hero-content{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    text-align:center;
+    color:#fff;
+    z-index:2;
+}
+.hero-content h2{ font-size:50px; margin-bottom:10px; }
+.hero-content p{ font-size:24px; margin-bottom:30px; }
+
+/* SECTIONS */
+section{ padding:20px 20px; }
+.section-title{ text-align:center; margin-bottom:20px; }
+.section-title h3{ font-size:36px; margin-bottom:10px; }
+.section-title p{ font-size:18px; color:#555; }
+
+/* FEATURES */
+.features{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:30px;
+    margin-top:40px;
+}
+.feature-card{
+    background:#fff;
+    padding:30px 20px;
+    border-radius:20px;
+    text-align:center;
+    box-shadow:0 10px 25px rgba(0,0,0,0.1);
+    transition:0.3s;
+}
+.feature-card i{
+    font-size:40px;
+    color:var(--primary);
+    margin-bottom:15px;
+}
+.feature-card h4{ font-size:22px; margin-bottom:10px; }
+.feature-card p{ color:#555; }
+.feature-card:hover{ transform:translateY(-10px); }
+
+/* FILTER */
+.filter-buttons{
+    display:flex;
+    justify-content:center;
+    gap:15px;
+    margin-bottom:40px;
+}
+.filter-buttons button{
+    padding:10px 28px;
+    border-radius:25px;
+    border:2px solid var(--primary);
+    background:transparent;
+    color:var(--primary);
+    font-weight:600;
+    cursor:pointer;
+    transition:0.3s;
+}
+.filter-buttons button.active,
+.filter-buttons button:hover{
+    background:var(--primary);
+    color:#fff;
+}
+
+/* MENU */
+.menu{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:30px;
+}
+.menu-card{
+    background:#fff;
+    border-radius:20px;
+    overflow:hidden;
+    box-shadow:0 10px 25px rgba(0,0,0,0.1);
+}
+.menu-card img{ width:100%; height:200px; object-fit:cover; }
+.menu-info{ padding:20px; }
+.menu-info h4{ margin-bottom:5px; }
+.menu-info p{ margin-bottom:10px; }
+.menu-info button{
+    width:100%;
+    padding:12px;
+    background:var(--primary);
+    border:none;
+    border-radius:25px;
+    color:#fff;
+    font-size:16px;
+    cursor:pointer;
+}
+
+/* FOOTER */
+footer{
+    background:var(--dark);
+    color:#fff;
+    text-align:center;
+    padding:35px;
+}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+    section{ padding:50px 20px; }
+    .hero-content h2{ font-size:36px; }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">
+        <img src="/static/Images/Logo.webp" alt="TastyHub Logo">
+        <h1>TastyHub Food Restaurant</h1>
+    </div>
+    <nav style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size: 20px;">
+        <a href="#">Home</a>
+        <a href="#features">Why Choose Us?</a>
+        <a href="#menu">Menu</a>
+    </nav>
+    <div class="auth-btns">
+        <button><a href="/login">Login</a></button>
+        <button class="primary"><a href="/register">Register</a></button>
+    </div>
+</header>
+
+<div class="hero">
+    <div class="hero-content">
+        <h2>Veg & Non-Veg Restaurant</h2>
+        <p>Fresh Food • Rich Taste • Fast Delivery</p>
+    </div>
+</div>
+
+<!-- FEATURES SECTION -->
+<section id="features">
+    <div class="section-title">
+        <h3>Why Choose TastyHub?</h3>
+        <p>Delicious options for both Veg & Non-Veg lovers</p>
+    </div>
+    <div class="features">
+        <div class="feature-card">
+            <i class="fa-solid fa-leaf"></i>
+            <h4>Fresh Veg Dishes</h4>
+            <p>Healthy and delicious vegetarian meals.</p>
+        </div>
+        <div class="feature-card">
+            <i class="fa-solid fa-drumstick-bite"></i>
+            <h4>Non-Veg Specialties</h4>
+            <p>Juicy meats cooked to perfection.</p>
+        </div>
+        <div class="feature-card">
+            <i class="fa-solid fa-truck-fast"></i>
+            <h4>Fast Delivery</h4>
+            <p>Hot food delivered at your doorstep quickly.</p>
+        </div>
+        <div class="feature-card">
+            <i class="fa-solid fa-star"></i>
+            <h4>Top Rated</h4>
+            <p>Highly rated dishes by our happy customers.</p>
+        </div>
+    </div>
+</section>
+
+<!-- MENU SECTION -->
+<section id="menu">
+    <div class="section-title">
+        <h3>Popular Dishes</h3>
+    </div>
+
+    <div class="filter-buttons">
+        <button class="active" onclick="filterMenu('all',this)">All</button>
+        <button onclick="filterMenu('veg',this)">Veg</button>
+        <button onclick="filterMenu('nonveg',this)">Non-Veg</button>
+    </div>
+
+    <div class="menu">
+        <!-- VEG -->
+        <div class="menu-card" data-category="veg">
+            <img src="/static/Images/Butter_Paneer.jpg">
+            <div class="menu-info">
+                <h4>Paneer Butter Masala (Veg)</h4>
+                <p>₹249</p>
+                <button>Order Now</button>
+            </div>
+        </div>
+
+        <div class="menu-card" data-category="veg">
+            <img src="/static/Images/SpecialVegThanli.jpg">
+            <div class="menu-info">
+                <h4>Special Veg Thali (Veg)</h4>
+                <p>₹229</p>
+                <button>Order Now</button>
+            </div>
+        </div>
+
+        <!-- NON-VEG -->
+        <div class="menu-card" data-category="nonveg">
+            <img src="/static/Images/MuttonCurry.webp">
+            <div class="menu-info">
+                <h4>Mutton Curry (Non-Veg)</h4>
+                <p>₹299</p>
+                <button>Order Now</button>
+            </div>
+        </div>
+
+        <div class="menu-card" data-category="nonveg">
+            <img src="/static/Images/Biryani.jpg">
+            <div class="menu-info">
+                <h4>Chicken Biryani (Non-Veg)</h4>
+                <p>₹149</p>
+                <button>Order Now</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer>
+    © 2025 TastyHub | Veg & Non-Veg Restaurant
+   <p> Owner - Divya Santosh Mane </p>
+</footer>
+
+<script>
+function filterMenu(category, btn){
+    let cards = document.querySelectorAll('.menu-card');
+    let buttons = document.querySelectorAll('.filter-buttons button');
+
+    buttons.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    cards.forEach(card => {
+        if(category === 'all' || card.dataset.category === category){
+            card.style.display = 'block';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+}
+</script>
+
+</body>
+</html>

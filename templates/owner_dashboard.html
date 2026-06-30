@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>TastYHub — Dashboard</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+:root{
+  --accent:#ff4d79;
+  --dark:#111;
+  --muted:#777;
+  --bg:#f7f7fc;
+  --card:#fff;
+}
+*{box-sizing:border-box;margin:0;padding:0;font-family:"Poppins";}
+body{background:var(--bg); color:#222; min-height:100vh;}
+
+/* Header */
+.header{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:14px 22px;
+  background:var(--card);
+  border-bottom:3px solid rgba(255,77,77,0.12);
+}
+.header img{width:50px;height:50px;border-radius:10px; margin-left: 220px;}
+.header-title{font-weight:900;color:var(--accent);font-size:50px;margin-left:20px;word-spacing: 3px;}
+
+/* Navbar */
+.navbar{
+  background:var(--dark);
+  padding:18px 0;
+  display:flex;
+  justify-content:center;
+  gap:50px;
+  box-shadow:0 4px 10px rgba(0,0,0,0.2);
+}
+.navbar a{
+  color:#fff;
+  text-decoration:none;
+  font-weight:700;
+  font-size:26px;
+  padding:5px 22px;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  border-radius:8px;
+  transition:0.3s;
+  letter-spacing:1px;
+}
+.navbar a:hover{
+  color:var(--accent);
+  background:rgba(255,77,77,0.12);
+  transform:translateY(-3px);
+}
+
+/* Container */
+.container{padding:22px; max-width:1250px; margin:auto;}
+
+/* Cards */
+.card-row{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:18px;
+}
+.card{
+  background:var(--card);
+  border-radius:12px;
+  padding:18px;
+  box-shadow:0 6px 20px rgba(158, 152, 152, 0.888);
+  text-align:center;
+}
+.card h2{color:var(--accent);font-size:22px}
+.card p{color:var(--muted);margin-top:8px;font-weight:600;font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;}
+
+/* Graphs */
+.graph-row{
+  display:flex;
+  gap:25px;
+  margin-top:50px;
+}
+.graph{
+  flex:1;
+  background:var(--card);
+  border-radius:12px;
+  padding:10px 16px;
+  box-shadow:0 6px 20px rgba(0,0,0,0.06);
+  min-height:260px;
+}
+.graph h3{
+  margin-bottom:8px;
+  font-size:15px;
+  color:var(--dark);
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+.graph canvas{
+  height:180px !important;
+  width:100% !important;
+}
+
+/* Responsive */
+@media (max-width:1200px){.card-row{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:900px){
+  .navbar{gap:20px;flex-wrap:wrap;}
+  .navbar a{font-size:20px;}
+  .card-row{grid-template-columns:repeat(2,1fr);}
+  .graph-row{flex-direction:column;}
+}
+@media (max-width:600px){.card-row{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <img src="/static/Images/Logo.webp" alt="Logo">
+  <div>
+    <div class="header-title">TASTYHUB FOOD RESTAURANT</div>
+  </div>
+</header>
+
+<nav class="navbar">
+  <a href="/food">Menu</a>
+  <a href="/customers">Customers</a>
+  <a href="/orders">Orders</a>
+  <a href="/owner_profile">Profile</a>
+ <a href="/logout">Logout</a>
+</nav>
+
+<div class="container">
+
+  <div class="card-row">
+    <div class="card">
+      <h2 id="menuCount">0</h2>
+      <p>Total Menus</p>
+    </div>
+    <div class="card">
+      <h2 id="todayOrders">0</h2>
+      <p>Today's Orders</p>
+    </div>
+    <div class="card">
+      <h2 id="todayIncome">₹0</h2>
+      <p>Today's Income</p>
+    </div>
+    <div class="card">
+      <h2 id="totalOrders">0</h2>
+      <p>Total Orders</p>
+    </div>
+    <div class="card">
+      <h2 id="totalIncome">₹0</h2>
+      <p>Total Income</p>
+    </div>
+  </div>
+
+  <div class="graph-row">
+    <div class="graph">
+      <h3>Orders (Last 7 Days)</h3>
+      <canvas id="ordersChart"></canvas>
+    </div>
+    <div class="graph">
+      <h3>Income (Last 7 Days)</h3>
+      <canvas id="revenueChart"></canvas>
+    </div>
+  </div>
+
+</div>
+
+<script>
+fetch("/owner/dashboard_data")
+.then(res => res.json())
+.then(data => {
+    console.log(data); // debug
+
+    document.getElementById("menuCount").innerText = data.menu_count;
+    document.getElementById("todayOrders").innerText = data.today_orders;
+    document.getElementById("todayIncome").innerText = "₹" + data.today_income;
+    document.getElementById("totalOrders").innerText = data.total_orders;
+    document.getElementById("totalIncome").innerText = "₹" + data.total_income;
+
+    // Charts
+    const orderLabels = data.orders_graph.map(o =>
+      new Date(o.day).toISOString().split('T')[0]);
+    const orderValues = data.orders_graph.map(o => o.total);
+    const revenueLabels = data.revenue_graph.map(r =>
+        new Date(r.day).toISOString().split('T')[0]);
+    const revenueValues = data.revenue_graph.map(r => r.revenue);
+
+    new Chart(document.getElementById('ordersChart'), {
+      type: 'line',
+      data: { labels: orderLabels, datasets:[{
+        data: orderValues,
+        borderColor: '#ff4d79',
+        backgroundColor: 'rgba(255,77,121,0.2)',
+        tension: 0.3
+      }]},
+      options: { plugins:{legend:{display:false}} }
+    });
+
+    new Chart(document.getElementById('revenueChart'), {
+      type: 'bar',
+      data: { labels: revenueLabels, datasets:[{
+        data: revenueValues,
+        backgroundColor: '#ff7a9a'
+      }]},
+      options: { plugins:{legend:{display:false}} }
+    });
+})
+.catch(err => console.error("Dashboard fetch error:", err));
+</script>
+
+</body>
+</html>

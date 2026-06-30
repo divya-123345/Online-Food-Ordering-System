@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>TastyHub – Order Bill</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+:root{
+  --accent:#ff4d79;
+  --bg:#f7f7fc;
+  --primary:#111;
+  --gray:#666;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins}
+body{background:var(--bg)}
+
+.header{
+  background:#fff;
+  padding:15px;
+  display:flex;
+  align-items:center;
+  border-bottom:3px solid rgba(255,77,77,.15)
+}
+.header img{
+  width:55px;
+  border-radius:12px;
+  margin-right:10px;
+  margin-left:220px;
+}
+.header-title{
+  font-size:50px;
+  font-weight:900;
+  color:var(--accent);
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+.navbar{
+  background:var(--primary);
+  padding:10px 20px;
+  display:flex;
+  align-items:center
+}
+.navbar a{
+  color:#fff;
+  margin-right:20px;
+  text-decoration:none;
+  font-weight:600;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+.navbar a:hover{color:var(--accent)}
+
+/* ===== BILL DESIGN ===== */
+
+.bill-container{
+  max-width:800px;
+  margin:30px auto;
+  background:#fff;
+  border-radius:15px;
+  box-shadow:0 10px 30px rgba(0,0,0,.1);
+  overflow:hidden;
+}
+
+.invoice-top{
+  background:linear-gradient(135deg,#ff4d79,#ff758c);
+  color:#fff;
+  padding:25px;
+  text-align:center;
+}
+
+.invoice-top h2{
+  font-size:36px;
+  letter-spacing:1px;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+.invoice-top p{
+  font-size:20px;
+  letter-spacing:1px;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+.invoice-body{
+  padding:25px;
+}
+
+.info-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:15px;
+  margin-bottom:25px;
+}
+
+.info-box{
+  font-size:15px;
+  color:var(--gray);
+}
+
+.info-box strong{
+  color:#000;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+.items-table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:10px;
+}
+
+.items-table th{
+  background:#f2f2f2;
+  padding:12px;
+  text-align:left;
+  font-size:15px;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+.items-table td{
+  padding:12px;
+  border-bottom:1px solid #eee;
+  font-size:15px;
+}
+
+.items-table tr:last-child td{
+  border-bottom:none;
+}
+
+.summary{
+  margin-top:25px;
+  border-top:2px dashed #ddd;
+  padding-top:20px;
+}
+
+.summary-row{
+  display:flex;
+  justify-content:space-between;
+  font-size:18px;
+  margin-bottom:8px;
+}
+
+.summary-row.total{
+  font-size:24px;
+  font-weight:800;
+  color:black;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+.pay-btn{
+  display:block;
+  margin:30px auto 10px;
+  width:80%;
+  background:#2ecc71;
+  color:#fff;
+  text-align:center;
+  padding:15px;
+  font-size:28px;
+  font-weight:700;
+  border-radius:30px;
+  text-decoration:none;
+  transition:.3s;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+.pay-btn:hover{
+  background:#27ae60;
+}
+
+.invoice-footer{
+  text-align:center;
+  padding:15px;
+  font-size:14px;
+  color:#777;
+  border-top:1px solid #eee;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+  <img src="/static/Images/Logo.webp" alt="Logo">
+  <div class="header-title">TASTYHUB FOOD RESTAURANT</div>
+</header>
+
+<nav class="navbar">
+  <a href="/customer_homepage"><i class="fa fa-bars"></i></a>
+</nav>
+
+<section class="bill-container">
+
+  <div class="invoice-top">
+    <h2>Order Invoice</h2>
+    <p>Thank you for ordering with TastyHub 🍽️</p>
+  </div>
+
+  <div class="invoice-body">
+
+    <div class="info-grid">
+      <div class="info-box">
+        <strong>Order ID:</strong> {{ order.id }} <br>
+        <strong>Date:</strong> {{ order.order_date }} <br>
+        <strong>Status:</strong> {{ order.status }}
+      </div>
+
+      <div class="info-box">
+        <strong>Customer:</strong> {{ order.customer_name }} <br>
+        <strong>Mobile:</strong> {{ order.mobile }} <br>
+        <strong>Address:</strong> {{ order.address }}
+      </div>
+    </div>
+
+    <table class="items-table">
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Qty</th>
+          <th>Price</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in items %}
+        <tr>
+          <td>{{ item.name }}</td>
+          <td>{{ item.quantity }}</td>
+          <td>₹{{ "%.2f"|format(item.price) }}</td>
+          <td>₹{{ "%.2f"|format(item.price * item.quantity) }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <div class="summary">
+      <div class="summary-row total">
+        <span style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">Total Amount</span>
+        <span>₹{{ "%.2f"|format(order.total_amount) }}</span>
+      </div>
+    </div>
+
+    <a href="/payment/{{ order.id }}" class="pay-btn">
+      Proceed to Payment
+    </a>
+
+  </div>
+
+  <div class="invoice-footer">
+    © 2025 TastyHub Food Restaurant • Fresh & Fast
+  </div>
+
+</section>
+
+</body>
+</html>

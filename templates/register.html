@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TastyHub — Register</title>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<style>
+:root{
+    --accent:#ff4d79;
+    --bg:#f7f7fc;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Poppins;
+}
+
+body{
+    background:var(--bg);
+}
+
+/* HEADER */
+.header{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    padding:14px 22px;
+    background:#fff;
+    border-bottom:3px solid rgba(255,77,77,0.13);
+}
+.header img{
+    width:55px;
+    height:55px;
+    border-radius:10px;
+    margin-left:250px;
+}
+.header-title{
+    font-size:42px;
+    font-weight:900;
+    color:var(--accent);
+    margin-left:18px;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+/* NAVBAR */
+.navbar{
+    height:60px;
+    background:#111;
+    position:relative;
+}
+.navbar a{
+    position:absolute;
+    left:20px;
+    top:50%;
+    transform:translateY(-50%);
+    font-size:26px;
+    color:white;
+    text-decoration:none;
+}
+
+/* CONTAINER */
+.container{
+    width:520px;
+    margin:45px auto;
+    background:white;
+    padding:30px;
+    border-radius:16px;
+    box-shadow:0 8px 18px rgba(0,0,0,0.12);
+}
+
+h2{
+    text-align:center;
+    color:var(--accent);
+    margin-bottom:22px;
+    font-size:32px;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+/* INPUTS */
+input, select{
+    width:100%;
+    padding:14px;
+    margin-bottom:16px;
+    border-radius:10px;
+    border:2px solid #ddd;
+    font-size:16px;
+    font-weight:bold;
+    color: #555;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+input::placeholder{
+    font-weight:bold;
+}
+
+/* BUTTONS */
+button{
+    width:100%;
+    padding:14px;
+    background:var(--accent);
+    border:none;
+    border-radius:10px;
+    color:white;
+    font-size:20px;
+    font-weight:bold;
+    cursor:pointer;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+button:hover{
+    opacity:0.9;
+}
+
+.btn-group{
+    display:flex;
+    justify-content:space-between;
+    margin-top:10px;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+.home-btn{
+    background:#555;
+}
+
+/* LINK */
+.register-link{
+    text-align:center;
+    margin-top:18px;
+    font-size:18px;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+.register-link a{
+    color:var(--accent);
+    text-decoration:none;
+    font-weight:bold;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+.register-link a:hover{
+    text-decoration:underline;
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header class="header">
+    <img src="/static/Images/Logo.webp" alt="logo">
+    <div class="header-title">TASTYHUB FOOD RESTAURANT</div>
+</header>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <a href="/">&#9776;</a>
+</nav>
+
+<!-- REGISTER FORM -->
+<div class="container">
+
+    <h2>Create Account</h2>
+
+    <form action="/register" method="POST" onsubmit="return validateForm()">
+
+        <input type="text" id="fullname" name="fullname" placeholder="Enter Full Name">
+        <input type="email" id="email" name="email" placeholder="Enter Email Address">
+        <input type="text" id="mobile" name="mobile" placeholder="Enter Mobile Number">
+        <input type="text" id="address" name="address" placeholder="Enter Address">
+        <input type="password" id="password" name="password" placeholder="Enter Password">
+
+        <select id="usertype" name="usertype">
+            <option value="">-- Select User Type --</option>
+            <option value="customer">Customer</option>
+        </select>
+
+        <div class="btn-group">
+            <button type="submit" style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">Register Here</button>
+            <!-- <button type="button" class="home-btn" onclick="location.href='/'">Home</button> -->
+        </div>
+
+        <div class="register-link">
+            Already have an account? <a href="/login">Login Here</a>
+        </div>
+
+    </form>
+</div>
+
+<script>
+function validateForm() {
+
+    const name = document.getElementById("fullname").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const mobile = document.getElementById("mobile").value.trim();
+    const address = document.getElementById("address").value.trim();
+    const password = document.getElementById("password").value.trim();
+    const usertype = document.getElementById("usertype").value;
+
+    if (name.length < 3) {
+        Swal.fire({ icon: "warning", title: "Invalid Name", text: "Full name must be at least 3 characters" });
+        return false;
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        alert("⚠ Enter a valid email address");
+        return false;
+    }
+
+    if (!/^[6-9]\d{9}$/.test(mobile)) {
+        alert("⚠ Enter valid 10-digit mobile number");
+        return false;
+    }
+
+    if (address.length < 4) {
+        alert("⚠ Address must be at least 4 characters");
+        return false;
+    }
+
+    if (password.length < 6) {
+        alert("⚠ Password must be at least 6 characters");
+        return false;
+    }
+
+    if (usertype === "") {
+        alert("⚠ Please select user type");
+        return false;
+    }
+
+    return true;
+}
+</script>
+
+</body>
+</html>

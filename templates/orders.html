@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TastyHub — Orders</title>
+
+<style>
+:root{
+    --accent:#ff4d79;
+    --dark:#111;
+    --bg:#f7f7fc;
+    --card:#fff;
+}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins;}
+body{background:var(--bg);}
+
+/* HEADER */
+.header{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    padding:14px 22px;
+    background:#fff;
+    border-bottom:3px solid rgba(255,77,77,0.13);
+}
+.header img{
+    width:55px;height:55px;border-radius:10px;margin-left:220px;
+}
+.header-title{
+    font-size:50px;font-weight:900;color:var(--accent);margin-left:18px;font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+/* Main box */
+.container{
+    width:90%;
+    max-width:1200px;
+    margin:auto;
+    margin-top:25px;
+    background:white;
+    padding:25px;
+    border-radius:12px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.08);
+}
+
+/* NAVBAR */
+.navbar{
+    height:60px;
+}
+
+h2{
+    color:var(--accent);
+    margin-bottom:15px;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+/* CHECKBOX STYLE */
+.filters{
+    margin-bottom:20px;
+    font-size:18px;
+}
+.filters label{
+    margin-right:25px;
+    cursor:pointer;font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+/* TABLE */
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:10px;
+}
+th, td{
+    padding:12px;
+    border-bottom:1px solid #ddd;
+    text-align:center;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+th{
+    background:#ffe6ec;
+    font-weight:700;
+}
+
+/* Buttons */
+.status-btn{
+    padding:6px 16px;
+    border:none;
+    border-radius:8px;
+    font-weight:700;
+    cursor:pointer;
+    color:white;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+.pending-btn{ background:orange; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;}
+.completed-btn{ background:green; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;}
+</style>
+
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+    <img src="/static/Images/Logo.webp" alt="logo">
+    <div class="header-title">TASTYHUB FOOD RESTAURANT</div>
+</header>
+
+<nav class="navbar" style="position:relative; background:#111;">
+    <a href="owner_dashboard" style="position:absolute; left:20px; top:50%; transform:translateY(-50%); font-size:24px; color:white; text-decoration:none;">
+        &#9776; <!-- Three horizontal lines -->
+    </a>
+</nav>
+
+<div class="container">
+
+    <h2>Orders</h2>
+
+    <!-- FILTERS -->
+    <div class="filters">
+    <label>
+        <input type="radio" name="statusFilter" value="All" checked onchange="renderTable()">
+        All
+    </label>
+
+    <label>
+        <input type="radio" name="statusFilter" value="Completed" onchange="renderTable()">
+        Completed
+    </label>
+
+    <label>
+        <input type="radio" name="statusFilter" value="Pending" onchange="renderTable()">
+        Pending
+    </label>
+</div>
+
+
+    <!-- ORDERS TABLE -->
+    <table id="ordersTable">
+        <tr>
+            <th>Sr No.</th>
+            <th>Customer Name</th>
+            <th>Address</th>
+            <th>Total (₹)</th>
+            <th>Status</th>
+        </tr>
+    </table>
+
+</div>
+
+<script>
+let allOrders = [];
+
+// Fetch all orders from backend
+fetch("/owner/get_orders")
+.then(res => res.json())
+.then(data => {
+    allOrders = data;
+    renderTable();
+})
+.catch(err => console.error(err));
+
+function renderTable() {
+    const filter = document.querySelector("input[name='statusFilter']:checked").value;
+    const table = document.getElementById("ordersTable");
+
+    // Reset table header
+    table.innerHTML = `
+        <tr>
+            <th>Sr No</th>
+            <th>Customer Name</th>
+            <th>Address</th>
+            <th>Total (₹)</th>
+            <th>Status</th>
+        </tr>
+    `;
+
+    let sr = 1;
+
+    allOrders.forEach(o => {
+        // FILTER LOGIC
+        if (filter === "Completed" && o.status !== "Completed") return;
+        if (filter === "Pending" && (o.status !== "Pending" || o.payment_status !== "Paid")) return;
+
+        table.innerHTML += `
+            <tr>
+                <td>${sr++}</td>
+                <td>${o.name}</td>
+                <td>${o.address || "-"}</td>
+                <td>₹${o.total}</td>
+                <td>
+${
+    o.status === "Completed"
+    ? `<button class="status-btn completed-btn" disabled>Completed</button>`
+    : (
+        o.payment_status !== "Paid"
+        ? `<button class="status-btn pending-btn" disabled>Pending</button>`
+        : `<button class="status-btn pending-btn" onclick="completeOrder(${o.id})">Pending</button>`
+      )
+}
+                </td>
+            </tr>
+        `;
+    });
+
+    if (sr === 1) {
+        table.innerHTML += `
+            <tr>
+                <td colspan="5">No orders found</td>
+            </tr>
+        `;
+    }
+}
+
+// Mark order as completed
+function completeOrder(orderId) {
+    fetch(`/owner/complete_order/${orderId}`, {
+        method: "POST"
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.status === "success") {
+            // Update the order in allOrders array
+            allOrders = allOrders.map(o =>
+                o.id === orderId ? {...o, status: "Completed"} : o
+            );
+            renderTable(); // re-render table
+        } else {
+            alert(data.message || "Failed to complete order");
+        }
+    })
+    .catch(err => console.error(err));
+}
+
+</script>
+
+
+</body>
+</html>

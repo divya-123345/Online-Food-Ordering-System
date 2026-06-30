@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Customers — TastyHub</title>
+
+<style>
+:root{
+    --accent:#ff4d79;
+    --dark:#111;
+    --muted:#777;
+    --bg:#f7f7fc;
+    --card:#fff;
+}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins;}
+body{background:var(--bg);}
+
+/* HEADER */
+.header{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    padding:14px 22px;
+    background:#fff;
+    border-bottom:3px solid rgba(255,77,77,0.13);
+}
+.header img{
+    width:55px;
+    height:55px;
+    border-radius:10px;
+    margin-left:220px;
+}
+.header-title{
+    font-size:50px;
+    font-weight:900;
+    color:var(--accent);
+    margin-left:18px;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+/* NAVBAR */
+.navbar{
+    height:60px;
+}
+
+/* MAIN CONTAINER */
+.container{
+    width:90%;
+    max-width:1200px;
+    margin:auto;
+    margin-top:25px;
+    background:white;
+    padding:25px;
+    border-radius:12px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.08);
+}
+
+h2{
+    color:var(--accent);
+    margin-bottom:15px;
+    font-size: 20px;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+/* TABLE */
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:10px;
+}
+th, td{
+    padding:12px;
+    border-bottom:1px solid #ddd;
+    text-align:center;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+th{
+    background:#ffe6ec;
+    color:var(--dark);
+    font-weight:700;
+    font-size: 20px;
+}
+tr:hover{
+    background:#f9f9f9;
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header class="header">
+    <img src="/static/Images/Logo.webp" alt="logo">
+    <div class="header-title">TASTYHUB FOOD RESTAURANT</div>
+</header>
+
+<!-- NAVBAR -->
+<nav class="navbar" style="position:relative; background:#111;">
+    <a href="/owner_dashboard"
+       style="position:absolute; left:20px; top:50%; transform:translateY(-50%);
+              font-size:24px; color:white; text-decoration:none;"> <i class="fa fa-arrow-left"></i> 
+        &#9776;
+    </a>
+</nav>
+
+<!-- PAGE CONTENT -->
+<div class="container">
+
+    <h2>Customer Details</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Sr. No</th>
+                <th>Customer Name</th>
+                <th>Address</th>
+                <th>Email</th>
+                <th>Mobile No</th>
+                <th>Total Orders</th>
+                <th>Total Bill (₹)</th>
+            </tr>
+        </thead>
+
+        <tbody id="customerTable">
+            <!-- Data loaded from DB -->
+        </tbody>
+    </table>
+
+</div>
+
+<script>
+fetch("/get_customers")
+.then(res => res.json())
+.then(data => {
+    const table = document.getElementById("customerTable");
+    table.innerHTML = "";
+
+    if(data.length === 0){
+        table.innerHTML = `
+            <tr>
+                <td colspan="7">No customers have placed orders yet</td>
+            </tr>
+        `;
+        return;
+    }
+
+    data.forEach(c => {
+        table.innerHTML += `
+            <tr>
+                <td>${c.sr}</td>
+                <td>${c.name}</td>
+                <td>${c.address || "-"}</td>
+                <td>${c.email}</td>
+                <td>${c.mobile}</td>
+                <td>${c.total_orders}</td>
+                <td>₹ ${c.total_bill}</td>
+            </tr>
+        `;
+    });
+})
+.catch(err => console.error(err));
+</script>
+
+
+</body>
+</html>

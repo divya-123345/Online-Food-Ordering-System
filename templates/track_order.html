@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>TastyHub – Track Order</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet"
+ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+:root{
+  --accent:#ff4d79;
+  --bg:#f7f7fc;
+}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins;}
+body{background:var(--bg);}
+
+/* HEADER */
+.header{
+  display:flex;align-items:center;
+  padding:14px 22px;background:#fff;
+  border-bottom:3px solid rgba(255,77,77,.15);
+}
+.header img{width:55px;border-radius:10px;margin-left:220px;}
+.header-title{
+  font-size:50px;font-weight:900;color:var(--accent);margin-left:18px;
+}
+
+/* NAVBAR */
+.navbar{
+  background:#111;padding:12px 20px;
+}
+.navbar a{color:#fff;font-size:22px;text-decoration:none;}
+
+/* MAIN */
+.container{
+  max-width:900px;margin:40px auto;
+  background:#fff;padding:30px;
+  border-radius:15px;
+  box-shadow:0 10px 25px rgba(0,0,0,.1);
+}
+h2{text-align:center;color:var(--accent);margin-bottom:30px;font-size: 25px;
+font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;}
+
+.order-box{
+  border:2px dashed #ddd;
+  padding:20px;margin-bottom:40px;
+  border-radius:12px;
+}
+
+.order-info p{
+  font-size:18px;font-weight:700;margin:6px 0;font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+table{
+  width:100%;border-collapse:collapse;margin-top:20px;
+}
+th,td{
+  border:1px solid #ddd;
+  padding:12px;text-align:center;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+th{background:var(--accent);color:#fff;font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;}
+
+.total{
+  text-align:right;font-size:20px;font-weight:900;margin-top:15px;font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+.status{
+  text-align:center;font-size:26px;font-weight:900;margin-top:15px;font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+.pending{color:#ff9800}
+.completed{color:#2ecc71}
+
+/* Progress */
+.progress{
+  display:flex;justify-content:space-between;
+  margin-top:30px;position:relative;
+}
+.progress::before{
+  content:'';position:absolute;top:22px;
+  left:0;width:100%;height:5px;background:#ddd;
+}
+.line{
+  position:absolute;top:22px;left:0;
+  height:5px;background:var(--accent);
+  width:50%;
+}
+.completed-line{width:100%;background:#2ecc71}
+
+.step{width:50%;text-align:center;z-index:2}
+.circle{
+  width:45px;height:45px;border-radius:50%;
+  background:#ddd;margin:auto;
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:20px;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+.active .circle{background:var(--accent)}
+.done .circle{background:#2ecc71}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <img src="/static/Images/Logo.webp">
+  <div class="header-title">TASTYHUB FOOD RESTAURANT</div>
+</header>
+
+<!-- NAV -->
+<nav class="navbar">
+  <a href="/customer_home"><i class="fa fa-arrow-left"></i></a>
+</nav>
+
+<div class="container">
+<h2>📦 Track Your Order</h2>
+
+{% if orders %}
+{% for order in orders %}
+
+<div class="order-box">
+
+  <div class="order-info">
+    <p>Order ID : {{ order.id }}</p>
+    <p>Customer : {{ order.customer_name }}</p>
+    <p>Date : {{ order.order_date }}</p>
+  </div>
+
+ <table>
+  <tr>
+    <th>Item</th>
+    <th>Qty</th>
+    <th>Price</th>
+    <th>Subtotal</th>
+  </tr>
+
+  {% for item in order['items'] %}
+  <tr>
+    <td>{{ item.item_name }}</td>
+    <td>{{ item.quantity }}</td>
+    <td>₹{{ item.price }}</td>
+    <td>₹{{ item.subtotal }}</td>
+  </tr>
+  {% endfor %}
+</table>
+
+  <div class="total">
+    Total Bill : ₹{{ order.total_amount }}
+  </div>
+
+  <div class="status {% if order.status=='Completed' %}completed{% else %}pending{% endif %}">
+    {{ order.status }}
+  </div>
+
+  <div class="progress">
+    <div class="line {% if order.status=='Completed' %}completed-line{% endif %}"></div>
+
+    <div class="step active">
+      <div class="circle"><i class="fa fa-receipt"></i></div>
+      Order Placed
+    </div>
+
+    <div class="step {% if order.status=='Completed' %}done{% endif %}">
+      <div class="circle"><i class="fa fa-check"></i></div>
+      Completed
+    </div>
+  </div>
+
+</div>
+
+{% endfor %}
+{% else %}
+<p style="text-align:center;font-size:22px;font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">No orders yet 🍽️</p>
+{% endif %}
+
+</div>
+</body>
+</html>

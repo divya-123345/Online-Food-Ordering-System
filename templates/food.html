@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TastyHub Menu Manager</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+:root{
+    --accent:#ff4d79;
+    --dark:#111;
+    --bg:#f7f7fc;
+}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins;}
+body{background:var(--bg);}
+
+/* HEADER */
+.header{
+    display:flex;align-items:center;
+    padding:14px 22px;background:#fff;
+    border-bottom:3px solid rgba(255,0,0,.15);
+}
+.header img{width:55px;height:55px;border-radius:10px;margin-left:260px;}
+.header-title{
+    font-size:46px;font-weight:900;
+    color:var(--accent);
+    margin-left:20px;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+/* NAVBAR */
+.navbar{
+    background:var(--dark);
+    padding:16px 0;
+    display:flex;
+    justify-content:center;
+    gap:40px;
+}
+.navbar a{
+    color:#fff;
+    text-decoration:none;
+    padding:8px 20px;
+    border-radius:8px;
+    font-weight:600;
+    font-size:25px;
+    cursor:pointer;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+.navbar a:hover{
+    background:rgba(255,77,77,.2);
+    color:var(--accent);
+}
+
+/* SECTION */
+.section{
+    display:none;
+    margin:25px auto;
+    background:#fff;
+    padding:20px;
+    width:95%;
+    max-width:1700px;
+    border-radius:12px;
+    box-shadow:0 2px 10px rgba(0,0,0,.1);
+}
+
+h2{
+    color:var(--accent);
+    margin-bottom:15px;
+    font-size:22px;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+/* FILTER */
+.filter{margin-bottom:20px;}
+.filter label{margin-right:20px;font-size:18px;}
+
+/* MENU GRID */
+/* MENU GRID */
+.menu{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(400px, 1fr));
+  gap:28px;
+  padding:10px;
+}
+
+/* MENU CARD */
+.menu-card{
+  background:#fff;
+  border-radius:18px;
+  box-shadow:0 8px 22px rgba(0,0,0,.12);
+  overflow:hidden;
+  transition:transform .3s ease, box-shadow .3s ease;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+.menu-card:hover{
+  transform:translateY(-6px);
+  box-shadow:0 12px 30px rgba(0,0,0,.18);
+}
+
+/* FOOD IMAGE */
+.menu-card img{
+  width:100%;
+  height:270px;
+  object-fit:cover;
+}
+
+/* CARD CONTENT */
+.menu-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:14px 16px;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+/* FOOD NAME */
+.menu-row h4{
+  font-size:25px;
+  font-weight:700;
+  color:#222;
+  line-height:1.3;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+
+/* ICON GROUP */
+.action-icons{
+    display:flex;
+    gap:10px;
+}
+
+/* ICON BUTTON */
+.icon-btn{
+    width:36px;
+    height:36px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    transition:all .25s ease;
+    box-shadow:0 3px 8px rgba(0,0,0,.15);
+    font-size:14px;
+}
+
+/* EDIT */
+.icon-btn.edit{
+    background:#fff;
+    color:#ff4d79;
+    border:1px solid rgba(255,77,121,.4);
+}
+.icon-btn.edit:hover{
+    background:#ff4d79;
+    color:#fff;
+}
+
+/* DELETE */
+.icon-btn.delete{
+    background:#fff;
+    color:#e63946;
+    border:1px solid rgba(230,57,70,.4);
+}
+.icon-btn.delete:hover{
+    background:#e63946;
+    color:#fff;
+}
+
+
+/* ACTION ICONS */
+.action-icons{
+    display:flex;
+    justify-content:center;
+    gap:14px;
+}
+
+/* ICON BUTTON */
+.icon-btn{
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    transition:all .3s ease;
+    box-shadow:0 4px 10px rgba(0,0,0,.15);
+}
+
+/* EDIT */
+.icon-btn.edit{
+    background:#fff;
+    color:var(--accent);
+    border:1px solid rgba(255,77,121,.4);
+}
+.icon-btn.edit:hover{
+    background:var(--accent);
+    color:#fff;
+    transform:scale(1.1);
+}
+
+/* DELETE */
+.icon-btn.delete{
+    background:#fff;
+    color:#e63946;
+    border:1px solid rgba(230,57,70,.4);
+}
+.icon-btn.delete:hover{
+    background:#e63946;
+    color:#fff;
+    transform:scale(1.1);
+}
+
+/* FORM */
+input,select,button{
+    width:100%;
+    padding:10px;
+    margin:8px 0;
+    border:1px solid #ccc;
+    border-radius:8px;
+    font-size:18px;
+}
+
+button{
+    background:var(--accent);
+    color:#fff;
+    font-weight:700;
+    border:none;
+    cursor:pointer;
+}
+button:hover{opacity:.9}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+    <img src="/static/Images/Logo.webp">
+    <div class="header-title">TASTYHUB FOOD RESTAURANT</div>
+</header>
+
+<nav class="navbar">
+    <a href="/owner_dashboard">⬅</a>
+    <a onclick="showSection('viewMenu')">View Menu</a>
+    <a onclick="showSection('addMenu')">Add Menu</a>
+</nav>
+
+<!-- VIEW MENU -->
+<div class="section" id="viewMenu">
+<h2>View Menu</h2>
+
+<div class="filter">
+<label style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size: 20px;"><input type="radio" name="filter" value="all" checked onchange="loadMenu()"> All</label>
+<label style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size: 20px;"><input type="radio" name="filter" value="Veg" onchange="loadMenu()"> Veg</label>
+<label style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size: 20px;"><input type="radio" name="filter" value="Non-Veg" onchange="loadMenu()"> Non-Veg</label>
+</div>
+
+<div class="menu" id="menuContainer"></div>
+</div>
+
+<!-- ADD MENU -->
+<div class="section" id="addMenu">
+<h2 style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">Add Food</h2>
+<input id="addName" placeholder="Food Name">
+<input id="addPrice" type="number" placeholder="Price">
+<select id="addCategory">
+<option style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">Veg</option>
+<option style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">Non-Veg</option>
+</select>
+<input type="file" id="addImg">
+<button onclick="addFood()" style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">Add Food</button>
+</div>
+
+<!-- UPDATE MENU -->
+<div class="section" id="updateMenu">
+<h2 style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;" >Update Price</h2>
+<select id="upFood" onchange="fillUpdate()"></select>
+<input id="upCategory" readonly placeholder="Category">
+<input id="upOldPrice" readonly placeholder="Old Price">
+<input id="upNewPrice" type="number" placeholder="New Price">
+<button onclick="updateFood()" style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">Update Price</button>
+</div>
+
+<script>
+let foodData=[];
+
+function showSection(id){
+    document.querySelectorAll(".section").forEach(s=>s.style.display="none");
+    document.getElementById(id).style.display="block";
+    if(id==="viewMenu") loadMenu();
+    if(id==="updateMenu") loadFoodDropdowns();
+}
+
+async function loadMenu(){
+    const res = await fetch("/get_food");
+    const menu = await res.json();
+
+    const filter = document.querySelector("input[name='filter']:checked").value;
+    const box = document.getElementById("menuContainer");
+    box.innerHTML = "";
+
+    menu.forEach(item=>{
+        if(filter!=="all" && item.category!==filter) return;
+
+        box.innerHTML += `
+        <div class="menu-card">
+            <img src="${item.image}">
+            <div class="menu-row">
+                <h4>${item.name} - ₹${item.price}</h4>
+
+                <div class="action-icons">
+                    <div class="icon-btn edit" onclick="openUpdate('${item.name}')">
+                        <i class="fa-solid fa-pen"></i>
+                    </div>
+                    <div class="icon-btn delete" onclick="deleteFood('${item.name}')">
+                        <i class="fa-solid fa-trash"></i>
+                    </div>
+                </div>
+            </div>
+        </div>`;
+    });
+}
+
+function openUpdate(name){
+    showSection("updateMenu");
+    setTimeout(()=>{
+        upFood.value=name;
+        fillUpdate();
+    },200);
+}
+
+function loadFoodDropdowns(){
+fetch("/get_food").then(r=>r.json()).then(data=>{
+foodData=data;
+upFood.innerHTML='<option>Select Food</option>';
+data.forEach(i=>{
+upFood.innerHTML+=`<option>${i.name}</option>`;
+});
+});
+}
+
+function fillUpdate(){
+let f=foodData.find(x=>x.name===upFood.value);
+if(!f) return;
+upCategory.value=f.category;
+upOldPrice.value=f.price;
+}
+
+function addFood(){
+let fd=new FormData();
+fd.append("name",addName.value);
+fd.append("price",addPrice.value);
+fd.append("category",addCategory.value);
+fd.append("image",addImg.files[0]);
+
+fetch("/add_food",{method:"POST",body:fd})
+.then(r=>r.json())
+.then(d=>{
+alert(d.message);
+showSection("viewMenu");
+});
+}
+
+function updateFood(){
+let fd=new FormData();
+fd.append("name",upFood.value);
+fd.append("price",upNewPrice.value);
+
+fetch("/update_food",{method:"POST",body:fd})
+.then(r=>r.json())
+.then(d=>{
+alert(d.message);
+showSection("viewMenu");
+});
+}
+
+function deleteFood(name){
+if(!confirm("Delete this food item?")) return;
+
+let fd=new FormData();
+fd.append("name",name);
+
+fetch("/delete_food",{method:"POST",body:fd})
+.then(r=>r.json())
+.then(d=>{
+alert(d.message);
+loadMenu();
+});
+}
+
+showSection("viewMenu");
+</script>
+
+</body>
+</html>
